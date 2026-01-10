@@ -4,3 +4,10 @@ resource "aws_ssm_parameter" "vpc_id" {
     value = module.vpc.vpc_id
   
 }
+
+resource "aws_ssm_parameter" "private_subnet_ids" {
+    name = "/${var.project_name}/${var.environment}/private_subnet_ids"
+    type = "StringList"
+    value = join("," , module.vpc.private_subnet_ids)
+  
+}
