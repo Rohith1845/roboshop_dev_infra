@@ -22,9 +22,9 @@ resource "terraform_data" "mongodb" {
         user = "ec2-user"
         password = "DevOps321"
         host = self.public_ip
-  }
+    }
 
-    provisioner "" {
+    provisioner "remote-exec" {
         inline =[
             "echo hello world"
         ]
