@@ -133,8 +133,9 @@ resource "aws_instance" "mysql" {
 
 }
 
-resource "aws_iam_policy" "policy" {
+resource "aws_iam_role_policy" "ssm_policy" {
     name = "EC2SSMPARAMETERREAD"
+    role = aws_iam_role.ec2_role.name
     policy = jsonencode({
         "Version": "2012-10-17",
         "Statement": [
@@ -153,15 +154,14 @@ resource "aws_iam_policy" "policy" {
 
 resource "aws_iam_role" "ec2_role" {
     name = "EC2SSMPARAMETERREAD"
-    # assume_role_policy = jsonencode({
-    #     Version = "2012-10-17"
-    #     Statement = [{
-    #         Effect    = "Allow"
-    #         Principal = { Service = "ec2.amazonaws.com" }
-    #         Action    = "sts:AssumeRole"
-    #     }]
-    # })
-    assume_role_policy = aws_iam_policy.policy.name
+    assume_role_policy = jsonencode({
+        Version = "2012-10-17"
+        Statement = [{
+            Effect    = "Allow"
+            Principal = { Service = "ec2.amazonaws.com" }
+            Action    = "sts:AssumeRole"
+        }]
+    })
     
 }
 
