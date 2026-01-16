@@ -118,7 +118,7 @@ resource "terraform_data" "rabbitmq" {
     }
 }
 
-resource "aws_instance" "mysql_sg_id" {
+resource "aws_instance" "mysql_db" {
     ami = local.ami_id
     instance_type = "t3.micro"
     vpc_security_group_ids = [local.mysql_sg_id]
@@ -132,16 +132,16 @@ resource "aws_instance" "mysql_sg_id" {
 
 }
 
-resource "terraform_data" "mysql" {
+resource "terraform_data" "mysql_db" {
     triggers_replace = [
-        aws_instance.mysql.id
+        aws_instance.mysql_db.id
     ]
 
     connection {
         type = "ssh"
         user = "ec2-user"
         password = "DevOps321"
-        host = aws_instance.mysql.private_ip
+        host = aws_instance.mysql_db.private_ip
     }
 
     provisioner "file" {
