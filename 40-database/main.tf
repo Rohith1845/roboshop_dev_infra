@@ -26,7 +26,7 @@ resource "terraform_data" "mongodb" {
 
     provisioner "file" {
         source = "bootstrap.sh"
-        destination = "tmp/bootstrap.sh"
+        destination = "/tmp/bootstrap.sh"
     }
 
     provisioner "remote-exec" {
@@ -66,7 +66,7 @@ resource "terraform_data" "redis" {
 
     provisioner "file" {
         source = "bootstrap.sh"
-        destination = "tmp/bootstrap.sh"
+        destination = "/tmp/bootstrap.sh"
     }
 
     provisioner "remote-exec" {
@@ -106,7 +106,7 @@ resource "terraform_data" "rabbitmq" {
 
     provisioner "file" {
         source = "bootstrap.sh"
-        destination = "tmp/bootstrap.sh"
+        destination = "/tmp/bootstrap.sh"
     }
 
     provisioner "remote-exec" {
@@ -146,7 +146,7 @@ resource "terraform_data" "mysql_db" {
 
     provisioner "file" {
         source = "bootstrap.sh"
-        destination = "tmp/bootstrap.sh"
+        destination = "/tmp/bootstrap.sh"
     }
 
     provisioner "remote-exec" {
