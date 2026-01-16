@@ -124,12 +124,50 @@ resource "aws_instance" "mysql" {
     vpc_security_group_ids = [local.mysql_sg_id]
     subnet_id = local.database_subnet_ids
 
+    iam_instance_profile = aws_iam_instance_profile.mysql.name
     tags = merge(
         local.common_tags,{
             Name = "${var.project_name}-${var.environment}-mysql"
         }
     )
 
+}
+
+resource "aws_iam_policy" "policy" {
+    name = "EC2SSMPARAMETERREAD"
+    policy = jsonencode({
+        "Version": "2012-10-17",
+        "Statement": [
+            {
+            "Effect": "Allow",
+            "Action": [
+            "ssm:GetParameter",
+            "ssm:GetParameters",
+            "ssm:GetParametersByPath"
+        ],
+        "Resource": "arn:aws:ssm:us-east-1:*:parameter/roboshop/*"
+        }
+        ]
+    })
+}
+
+resource "aws_iam_role" "ec2_role" {
+    name = "EC2SSMPARAMETERREAD"
+    # assume_role_policy = jsonencode({
+    #     Version = "2012-10-17"
+    #     Statement = [{
+    #         Effect    = "Allow"
+    #         Principal = { Service = "ec2.amazonaws.com" }
+    #         Action    = "sts:AssumeRole"
+    #     }]
+    # })
+    assume_role_policy = aws_iam_policy.policy.name
+    
+}
+
+resource "aws_iam_instance_profile" "mysql" {
+    name = "mysql"
+    role = aws_iam_role.ec2_role.name
 }
 
 resource "terraform_data" "mysql" {
