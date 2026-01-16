@@ -1,7 +1,7 @@
 #!/bin/bash
 
 
-dnf install -y
+dnf install ansible -y
 # ansible-pull -u https://github.com/Rohith1845/roboshop-ansible-roles-tf.git -e component=$component main.yaml
 # git clone ansible-playbook
 # cd ansible-playbook
