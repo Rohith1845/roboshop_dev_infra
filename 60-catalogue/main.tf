@@ -121,4 +121,50 @@ resource "aws_launch_template" "catalogue" {
         )
 }
 
+resource "aws_autoscaling_group" "catalogue" {
+  availability_zones        = ["us-east-1a"]
+  name                      = "${var.project_name}-${var.environment}-catalogue"
+  max_size                  = 10
+  min_size                  = 1
+  health_check_grace_period = 100
+  health_check_type         = "ELB"
+  force_delete              = false
+    launch_template {
+    id = aws_launch_template.catalogue.id
+    version = aws_launch_template.catalogue.latest_version
+    }
+    vpc_zone_identifier = local.private_subnet_ids
+    target_group_arns = [aws_alb_target_group.catalogue.arn]
+
+    dynamic "tag" {
+        for_each = merge(
+            local.common_tags,
+            {
+                Name = "${var.project_name}-${var.environment}-catalogue"
+            }
+        )
+        content {
+          key = tag.key
+          value = tag.value
+          propagate_at_launch = true
+        }
+    }
+    timeouts {
+        delete = "15m"
+    }
+}
+
+resource "aws_autoscaling_policy" "catalogue" {
+    autoscaling_group_name = aws_autoscaling_group.catalogue.name
+    name = "${var.project_name}-${var.environment}-catalogue"
+    policy_type = "TragetTrackingScaling"
+
+    target_tracking_configuration {
+        predefined_metric_specification {
+            predefined_metric_type = "ASGAverageCPUUtilization"
+        }
+        target_value = 75.0
+    }
+}
+
 
