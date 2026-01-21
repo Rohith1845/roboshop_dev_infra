@@ -78,7 +78,7 @@ resource "aws_alb_target_group" "catalogue" {
       matcher = "200-299"
       port = 8080
       protocol = "HTTP"
-      timeout = 10
+      timeout = 5
       unhealthy_threshold = 2
     }
 }
