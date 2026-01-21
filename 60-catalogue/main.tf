@@ -166,4 +166,3 @@ resource "aws_autoscaling_policy" "catalogue" {
     }
 }
 
-
