@@ -20,5 +20,5 @@ data "aws_ssm_parameter" "catalogue_sg_id" {
 }
 
 data "aws_ssm_parameter" "backend_alb_listener_arn" {
-    name = "${var.project_name}/${var.environment}/backend_alb_listener_arn"
+    name = "/${var.project_name}/${var.environment}/backend_alb_listener_arn"
 }
