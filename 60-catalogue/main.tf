@@ -74,11 +74,11 @@ resource "aws_lb_target_group" "catalogue" {
 
     health_check {
       healthy_threshold = 2
-      interval = 10
+      interval = 5
       matcher = "200-299"
       port = 8080
       protocol = "HTTP"
-      timeout = 5
+      timeout = 2
       unhealthy_threshold = 2
     }
 }
