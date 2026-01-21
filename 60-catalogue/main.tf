@@ -65,7 +65,7 @@ resource "aws_ami_from_instance" "catalogue" {
     )
 }
 
-resource "aws_alb_target_group" "catalogue" {
+resource "aws_lb_target_group" "catalogue" {
     name = "${var.project_name}-${var.environment}-catalogue"
     port = 8080
     protocol = "HTTP"
@@ -133,7 +133,7 @@ resource "aws_autoscaling_group" "catalogue" {
     version = aws_launch_template.catalogue.latest_version
     }
     vpc_zone_identifier = [local.private_subnet_ids]
-    target_group_arns = [aws_alb_target_group.catalogue.arn]
+    target_group_arns = [aws_lb_target_group.catalogue.arn]
 
     dynamic "tag" {
         for_each = merge(
@@ -164,5 +164,21 @@ resource "aws_autoscaling_policy" "catalogue" {
         }
         target_value = 75.0
     }
+}
+
+resource "aws_lb_listener_rule" "catalogue" {
+listener_arn = local.backend_alb_listener_arn
+priority = 10
+
+action {
+    type = "forward"
+    target_group_arn = aws_lb_target_group.catalogue.arn
+}
+
+condition {
+    host_header {
+      values = ["catalogue.backend-alb-${var.environment}.${var.domain_name}"]
+    }
+}
 }
 
