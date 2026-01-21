@@ -133,7 +133,7 @@ resource "aws_autoscaling_group" "catalogue" {
     id = aws_launch_template.catalogue.id
     version = aws_launch_template.catalogue.latest_version
     }
-    vpc_zone_identifier = local.private_subnet_ids
+    vpc_zone_identifier = [local.private_subnet_ids]
     target_group_arns = [aws_alb_target_group.catalogue.arn]
 
     dynamic "tag" {
