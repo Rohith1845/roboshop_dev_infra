@@ -15,7 +15,7 @@ resource "aws_lb" "backend_alb" {
 }
 
 # backend alb listening on port 80
-resource "aws_lb_listener" "backend" {
+resource "aws_lb_listener" "backend_alb" {
   load_balancer_arn = aws_lb.backend_alb.arn
   port              = "80"
   protocol          = "HTTP"
@@ -43,3 +43,4 @@ resource "aws_route53_record" "backend_alb" {
     }
 
 }
+
