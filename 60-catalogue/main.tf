@@ -122,7 +122,7 @@ resource "aws_launch_template" "catalogue" {
 }
 
 resource "aws_autoscaling_group" "catalogue" {
-  availability_zones        = ["us-east-1a"]
+  availability_zones        = ["us-east-1"]
   name                      = "${var.project_name}-${var.environment}-catalogue"
   max_size                  = 10
   min_size                  = 1
